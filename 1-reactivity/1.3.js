@@ -21,13 +21,11 @@ function observe (obj) {
     Object.defineProperty(obj, key, {
       get() {
         dep.depend()
-        console.log("count is: " + value)
         return value
       },
       set(newValue) {
-        dep.notify()
-        console.log("count is: " + newValue)
         value = newValue
+        dep.notify()
       },
       configurable: true,
       enumerable: true
@@ -36,6 +34,7 @@ function observe (obj) {
 }
 
 let activeUpdate;
+
 function autorun (update) {
   activeUpdate = update
   update()
@@ -44,12 +43,15 @@ function autorun (update) {
 
 //
 
+// 被观察的对象
 let state = {
   count: 0
 }
 
+// 观察它
 observe(state)
 
+// 每次被观察的对象改变会触发 autorun 的参数 - update 函数
 autorun(() => {
   console.log(state.count)
 })
@@ -57,3 +59,4 @@ autorun(() => {
 
 state.count++
 // should log "count is: 1"
+state.count++
