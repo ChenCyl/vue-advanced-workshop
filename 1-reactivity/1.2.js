@@ -1,7 +1,5 @@
-<script>
-// a class representing a dependency
-// exposing it on window is necessary for testing
-window.Dep = class Dep {
+
+class Dep {
 
   constructor() {
     this.subs = []
@@ -21,12 +19,23 @@ window.Dep = class Dep {
 
 
 let activeUpdate;
-function autorun (update) {
+
+function autorun(update) {
   // function wrappedUpdate() {
-    activeUpdate = update
-    update()
-    activeUpdate = null
+  activeUpdate = update
+  update()
+  activeUpdate = null
   // }
- 
+
 }
-</script>
+
+const dep = new Dep()
+
+autorun(() => {
+  dep.depend()
+  console.log('updated d')
+})
+// should log: "updated"
+
+dep.notify()
+// should log: "updated"
